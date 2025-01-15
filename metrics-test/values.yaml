@@ -21,7 +21,8 @@ virtualService:
   enabled: true
   name: metrics-app
   namespace: default
-  gateway: monitoring/monitoring-gateway
+  gateway: 
+    - monitoring/monitoring-gateway
   hosts:
     - metrics.ramil.local
   http:
