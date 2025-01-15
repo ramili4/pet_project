@@ -14,7 +14,7 @@ spec:
             prefix: /
       route:
         - destination:
-            host: {{ .Values.virtualService.http[0].route[0].destination.host }}
+            host: {{ index .Values.virtualService.http 0.route 0.destination.host }}
             port:
-              number: {{ .Values.virtualService.http[0].route[0].destination.port.number }}
+              number: {{ index .Values.virtualService.http 0.route 0.destination.port.number }}
 
