@@ -21,10 +21,16 @@ virtualService:
   enabled: true
   name: metrics-app
   namespace: default
+  gateway: 
+    - monitoring/monitoring-gateway
   hosts:
     - metrics.ramil.local
-  gateway: monitoring/monitoring-gateway
-  route:
-    host: metrics-app.default.svc.cluster.local
-    port: 8080
-
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: metrics-app.default.svc.cluster.local
+            port:
+              number: 8080
