@@ -31,7 +31,7 @@ virtualService:
             prefix: /
       route:
         - destination:
-            host: metrics-app.default.svc.cluster.local
+            host: metrics-test.default.svc.cluster.local
             port:
               number: 8080
 
