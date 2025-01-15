@@ -1,0 +1,6 @@
+# Chart.yaml
+apiVersion: v2
+name: metrics-test
+description: A simple application that emits Prometheus metrics
+version: 0.1.0
+appVersion: "1.0.0"

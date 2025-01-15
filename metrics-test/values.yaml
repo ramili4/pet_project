@@ -1,0 +1,30 @@
+replicaCount: 1
+
+image:
+  repository: metrics-test
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+virtualService:
+  enabled: true
+  name: metrics-app
+  namespace: default
+  hosts:
+    - metrics.ramil.local
+  gateway: monitoring/monitoring-gateway
+  route:
+    host: metrics-app.default.svc.cluster.local
+    port: 8080
+
