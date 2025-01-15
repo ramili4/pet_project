@@ -1204,7 +1204,13 @@ serverFiles:
             action: replace
             target_label: node
 
-# adds additional scrape configs to prometheus.yml
+# Custom scrape config for metrics-test
+       - job_name: 'metrics-test'
+         metrics_path: '/metrics'
+         static_configs:
+           - targets: ['metrics-test.default.svc.cluster.local:8080']
+
+              # adds additional scrape configs to prometheus.yml
 # must be a string so you have to add a | after extraScrapeConfigs:
 # example adds prometheus-blackbox-exporter scrape config
 extraScrapeConfigs: ""
