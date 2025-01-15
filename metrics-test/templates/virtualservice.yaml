@@ -1,3 +1,5 @@
+# templates/virtualservice.yaml
+{{- if .Values.virtualService.enabled }}
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -7,14 +9,9 @@ spec:
   gateways:
     - {{ .Values.virtualService.gateway }}
   hosts:
-    - {{ .Values.virtualService.hosts | join "," }}
+    {{- range .Values.virtualService.hosts }}
+    - {{ . }}
+    {{- end }}
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
-        - destination:
-            host: {{ index .Values.virtualService.http 0.route 0.destination.host }}
-            port:
-              number: {{ index .Values.virtualService.http 0.route 0.destination.port.number }}
-
+    {{- toYaml .Values.virtualService.http | nindent 4 }}
+{{- end }}
