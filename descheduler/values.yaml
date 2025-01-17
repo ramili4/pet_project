@@ -151,23 +151,26 @@ configMap:
   name: descheduler-policy
   data:
     policy.yaml: |
-      apiVersion: "descheduler/v1alpha1"
+      apiVersion: "descheduler/v1alpha2"
       kind: "DeschedulerPolicy"
-      strategies:
-        lowNodeUtilization:
-          enabled: true
-          thresholds:
-            memory: 50       # (Optional) Memory threshold for underutilization
-          targetThresholds:
-            memory: 85       # (Optional) Memory threshold for overutilization
-          nodeFit: true       # Ensure pods are rescheduled only if there is a suitable node availabl  
-      filters:
-        namespaces:
-          include:            # Namespaces to exclude from eviction/rescheduling
-            - helloworld
-            - default
-
-
+      profiles:
+        - name: PodLifeTimeProfile
+          pluginConfig:
+          - name: "PodLifeTime"
+            args:
+              maxPodLifeTimeSeconds: 604800 # 7 days
+              states:
+              - "Pending"
+              - "PodInitializing"
+          plugins:
+            deschedule:
+              enabled:
+                - "PodLifeTime"
+    filters:
+      namespaces:
+        include:
+          - my-app-namespace
+          - another-namespace
 nodeSelector: {}
 #  foo: bar
 
