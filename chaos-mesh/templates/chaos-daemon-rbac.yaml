@@ -50,7 +50,7 @@ rules:
 ---
 # Restricted DEFAULT policy
 # ( Default policy for all new services )
-apiVersion: policy/v1beta1
+apiVersion: policy/v1
 kind: PodSecurityPolicy
 metadata:
   name: {{ .Release.Name }}-chaos-daemon
