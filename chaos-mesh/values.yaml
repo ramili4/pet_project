@@ -113,7 +113,7 @@ chaosDaemon:
   runtime: containerd
 
   # socketPath specifies the container runtime socket.
-  socketPath: /var/run/docker.sock
+  socketPath: /var/run/containerd.sock
 
   # If you are using Kind or using containerd as CRI, you can use the
   # config below to use containerd as the runtime in chaos-daemon.
