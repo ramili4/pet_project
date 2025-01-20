@@ -110,15 +110,15 @@ chaosDaemon:
 
   # runtime specifies which container runtime to use. Currently
   # we only supports docker, containerd and CRI-O.
-  runtime: containerd
+  # runtime: containerd
 
   # socketPath specifies the container runtime socket.
-  socketPath: /var/run/containerd.sock
+  #socketPath: /var/run/containerd.sock
 
   # If you are using Kind or using containerd as CRI, you can use the
   # config below to use containerd as the runtime in chaos-daemon.
-  # runtime: containerd
-  # socketPath: /run/containerd/containerd.sock
+  runtime: containerd
+  socketPath: /run/containerd/containerd.sock
 
   # If you are using CRI-O as CRI, you can use the
   # config below to use CRI-O as the runtime in chaos-daemon.
