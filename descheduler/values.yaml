@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 # CronJob or Deployment
-kind: CronJob
+kind: Deployment
 
 image:
   repository: registry.k8s.io/descheduler/descheduler
