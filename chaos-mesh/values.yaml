@@ -158,7 +158,7 @@ dashboard:
   image: pingcap/chaos-dashboard:v2.0.3
   imagePullPolicy: IfNotPresent
 
-  securityMode: true
+  securityMode: false
 
   nodeSelector: {}
 
@@ -193,7 +193,7 @@ dashboard:
     # If set to false, Chaos Mesh will use an emptyDir instead, which is ephemeral.
     enabled: false
 
-    # If you'd like to bring your own PVC for persisting chaos event, pass the name of the
+    # If you'd l/ike to bring your own PVC for persisting chaos event, pass the name of the
     # created + ready PVC here. If set, this Chart will not create the default PVC.
     # Requires server.persistentVolume.enabled: true
     #
