@@ -29,15 +29,15 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           affinity:
-             podAntiAffinity:
-               {{- range .Values.affinityRules.separateFrom }}
-               - weight: {{ .weight | default 50 }}
-             podAffinityTerm:
-               labelSelector:
-                 matchExpressions:
-                   - key: {{ .key }}
-                     operator: In
-                     values:
-                       - {{ .value }}
-                topologyKey: kubernetes.io/hostname
-            {{- end }}
+            podAntiAffinity:
+              {{- range .Values.affinityRules.separateFrom }}
+              - weight: {{ .weight | default 50 }}
+                podAffinityTerm:
+                  labelSelector:
+                    matchExpressions:
+                     - key: {{ .key }}
+                       operator: In
+                       values:
+                         - {{ .value }}
+                  topologyKey: kubernetes.io/hostname
+              {{- end }}
