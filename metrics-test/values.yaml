@@ -20,7 +20,7 @@ resources:
 affinityRules:
   enableHardAntiAffinity: true
   separateFrom:
-    - key: app.kubernetes.io/name
+    - key: app.kubernetes.io/app
       value: metrics-test
       weight: 100
 
