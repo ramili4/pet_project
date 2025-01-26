@@ -32,10 +32,12 @@ spec:
         podAntiAffinity:
           {{- if .Values.affinityRules.enableHardAntiAffinity }}
           requiredDuringSchedulingIgnoredDuringExecution:
+            {{- range .Values.affinityRules.separateFrom }}
             - labelSelector:
                 matchLabels:
-                  app.kubernetes.io/app: {{ .Values.affinityRules.separateFrom.value }}
+                  {{ .key }}: {{ .value }}
               topologyKey: kubernetes.io/hostname
+            {{- end }}
           {{- end }}
           preferredDuringSchedulingIgnoredDuringExecution:
             {{- range .Values.affinityRules.separateFrom }}
@@ -46,6 +48,5 @@ spec:
                     {{ .key }}: {{ .value }}
                 topologyKey: kubernetes.io/hostname
             {{- end }}
-      
-      
-           
+
+        
