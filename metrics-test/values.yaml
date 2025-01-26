@@ -22,7 +22,7 @@ affinityRules:
   separateFrom:
     - key: app.kubernetes.io/name
       value: metrics-test
-      weight: 50
+      weight: 100
 
 virtualService:
   enabled: true
