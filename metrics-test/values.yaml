@@ -17,6 +17,13 @@ resources:
     cpu: 50m
     memory: 64Mi
 
+affinityRules:
+  enableHardAntiAffinity: true
+  separateFrom:
+    - key: app.kubernetes.io/name
+      value: metrics-test
+      weight: 50
+
 virtualService:
   enabled: true
   name: metrics-app
