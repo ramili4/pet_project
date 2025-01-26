@@ -30,30 +30,22 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
       affinity:
         podAntiAffinity:
-        {{- if .Values.affinityRules.enableHardAntiAffinity }}
-        requiredDuringSchedulingIgnoredDuringExecution:
-          {{- range .Values.affinityRules.separateFrom }}
-          - labelSelector:
-              matchExpressions:
-                - key: {{ .key }}
-                  operator: In
-                  values:
-                    - {{ .value }}
-            topologyKey: kubernetes.io/hostname
-          {{- end }}
-        {{- end }}
-    
-        preferredDuringSchedulingIgnoredDuringExecution:
-          {{- range .Values.affinityRules.separateFrom }}
-          - weight: {{ .weight | default 50 }}
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                  - key: {{ .key }}
-                    operator: In
-                    values:
-                      - {{ .value }}
+          {{- if .Values.affinityRules.enableHardAntiAffinity }}
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/app: {{ .Values.affinityRules.separateFrom.value }}
               topologyKey: kubernetes.io/hostname
           {{- end }}
-
-     
+          preferredDuringSchedulingIgnoredDuringExecution:
+            {{- range .Values.affinityRules.separateFrom }}
+            - weight: {{ .weight | default 50 }}
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    {{ .key }}: {{ .value }}
+                topologyKey: kubernetes.io/hostname
+            {{- end }}
+      
+      
+           
