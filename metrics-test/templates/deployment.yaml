@@ -28,6 +28,40 @@ spec:
               protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+        - name: metrics-sidecar
+          image: nginx/nginx-prometheus-exporter:0.10.0
+          args:
+            - -nginx.scrape-uri=http://localhost:8080/stub_status
+          ports:
+            - name: metrics
+              containerPort: 9113
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+
+        - name: nginx-proxy
+          image: nginx:1.21
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: {{ .Release.Name }}-nginx-config
       affinity:
         podAntiAffinity:
           {{- if .Values.affinityRules.enableHardAntiAffinity }}
