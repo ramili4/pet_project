@@ -1,9 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ .Release.Name }}-nginx-config
   labels:
     app: {{ .Release.Name }}
+data:
+  default.conf: {{ .Values.nginx.config | quote }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
