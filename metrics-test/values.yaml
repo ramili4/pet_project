@@ -17,6 +17,20 @@ resources:
     cpu: 50m
     memory: 64Mi
 
+nginx:
+  config: |
+    server {
+      listen 80;
+      location / {
+        proxy_pass http://localhost:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+      }
+      location /stub_status {
+        stub_status;
+      }
+    }
+
 affinityRules:
   enableHardAntiAffinity: true
   separateFrom:
