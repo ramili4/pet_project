@@ -15,9 +15,13 @@ spec:
         app: {{ .Release.Name }}
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "9113"  # изменено на порт metrics-sidecar
+        prometheus.io/port: "9113"
         prometheus.io/path: "/metrics"
     spec:
+      volumes:          # Перемещено в начало spec
+        - name: nginx-config
+          configMap:
+            name: {{ .Release.Name }}-nginx-config
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -34,7 +38,7 @@ spec:
           ports:
             - containerPort: 80
               name: http-nginx
-          volumeMounts:
+          volumeMounts:     # Использование определенного выше volume
             - name: nginx-config
               mountPath: /etc/nginx/conf.d
           readinessProbe:
@@ -54,7 +58,7 @@ spec:
         - name: metrics-sidecar
           image: nginx/nginx-prometheus-exporter:0.10.0
           args:
-            - -nginx.scrape-uri=http://localhost:80/stub_status  # изменено на порт nginx-proxy
+            - -nginx.scrape-uri=http://localhost:80/stub_status
           ports:
             - name: metrics
               containerPort: 9113
