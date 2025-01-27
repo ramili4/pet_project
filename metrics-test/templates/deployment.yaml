@@ -4,8 +4,6 @@ metadata:
   name: {{ .Release.Name }}-nginx-config
   labels:
     app: {{ .Release.Name }}
-data:
-  default.conf: {{ .Values.nginx.config | quote }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -17,7 +15,7 @@ spec:
         app: {{ .Release.Name }}
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "8080"
+        prometheus.io/port: "9113"  # изменено на порт metrics-sidecar
         prometheus.io/path: "/metrics"
     spec:
       containers:
@@ -30,10 +28,33 @@ spec:
               protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+            
+        - name: nginx-proxy
+          image: nginx:1.21
+          ports:
+            - containerPort: 80
+              name: http-nginx
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d
+          readinessProbe:
+            httpGet:
+              path: /stub_status
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+
         - name: metrics-sidecar
           image: nginx/nginx-prometheus-exporter:0.10.0
           args:
-            - -nginx.scrape-uri=http://localhost:8080/stub_status
+            - -nginx.scrape-uri=http://localhost:80/stub_status  # изменено на порт nginx-proxy
           ports:
             - name: metrics
               containerPort: 9113
@@ -44,45 +65,3 @@ spec:
             requests:
               cpu: 50m
               memory: 64Mi
-
-        - name: nginx-proxy
-          image: nginx:1.21
-          ports:
-            - containerPort: 80
-          volumeMounts:
-            - name: nginx-config
-              mountPath: /etc/nginx/conf.d
-          resources:
-            limits:
-              cpu: 100m
-              memory: 128Mi
-            requests:
-              cpu: 50m
-              memory: 64Mi
-
-      volumes:
-        - name: nginx-config
-          configMap:
-            name: {{ .Release.Name }}-nginx-config
-      affinity:
-        podAntiAffinity:
-          {{- if .Values.affinityRules.enableHardAntiAffinity }}
-          requiredDuringSchedulingIgnoredDuringExecution:
-            {{- range .Values.affinityRules.separateFrom }}
-            - labelSelector:
-                matchLabels:
-                  {{ .key }}: {{ .value }}
-              topologyKey: kubernetes.io/hostname
-            {{- end }}
-          {{- end }}
-          preferredDuringSchedulingIgnoredDuringExecution:
-            {{- range .Values.affinityRules.separateFrom }}
-            - weight: {{ .weight | default 50 }}
-              podAffinityTerm:
-                labelSelector:
-                  matchLabels:
-                    {{ .key }}: {{ .value }}
-                topologyKey: kubernetes.io/hostname
-            {{- end }}
-
-        
