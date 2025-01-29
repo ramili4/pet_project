@@ -10,8 +10,8 @@ spec:
   selector:
     namespaces: 
       - 'monitoring'
-        - 'helloworld'
-        - 'argo'
+      - 'helloworld'
+      - 'argo'
     expressionSelectors:
       - key: kubernetes.io/metadata.name
         operator: NotIn
