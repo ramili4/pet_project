@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: "https://github.com/ramili4/pet_project.git"
     targetRevision: HEAD
-    path: /chaos-experiments
+    path: chaos-experiments
   destination:
     server: "https://kubernetes.default.svc"
     namespace: chaos-testing
