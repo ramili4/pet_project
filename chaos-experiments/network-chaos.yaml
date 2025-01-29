@@ -1,8 +1,7 @@
 apiVersion: chaos-mesh.org/v1alpha1
 kind: NetworkChaos
 metadata:
-  name: global-network-delay-6
-  namespace: chaos
+  name: global-network-delay-7
   annotations:
     chaos-mesh.org/webhook-ignore: "true"
 spec:
