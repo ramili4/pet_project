@@ -1,20 +1,22 @@
 apiVersion: chaos-mesh.org/v1alpha1
 kind: NetworkChaos
 metadata:
-  name: global-network-delay-7
+  name: global-network-delay-8
   annotations:
     chaos-mesh.org/webhook-ignore: "true"
 spec:
   action: delay
   mode: all  # Targets all matching pods
   selector:
-    namespaces: []  # Targets all namespaces
+    namespaces: 
+      - 'monitoring'
+        - 'helloworld'
+        - 'argo'
     expressionSelectors:
       - key: kubernetes.io/metadata.name
         operator: NotIn
         values:
           - kube-system
-          - chaos
     labelSelectors: {}
   delay:
     latency: "100ms"
