@@ -146,8 +146,7 @@ chaosDaemon:
 dashboard:
   create: true
   hostNetwork: false
-  auth:
-    enable: false
+  securityMode: false
 
   replicaCount: 1
 
