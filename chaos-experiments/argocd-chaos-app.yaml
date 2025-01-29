@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: chaos-experiments
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: "https://github.com/ramili4/pet_project.git"
+    targetRevision: HEAD
+    path: /chaos-experiments
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: chaos-testing
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
