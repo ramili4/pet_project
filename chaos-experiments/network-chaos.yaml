@@ -9,9 +9,7 @@ spec:
   mode: all  # Targets all matching pods
   selector:
     namespaces: 
-      - 'monitoring'
-      - 'helloworld'
-      - 'argo'
+      - 'default'
     expressionSelectors:
       - key: kubernetes.io/metadata.name
         operator: NotIn
