@@ -16,6 +16,4 @@ spec:
     correlation: "25"
     jitter: "50ms"
   duration: "5m"
-  scheduler:
-    cron: "@hourly"
 
