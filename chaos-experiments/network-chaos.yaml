@@ -10,6 +10,7 @@ spec:
   selector:
     namespaces: 
       - 'default'
+      - 'istio-system'
     expressionSelectors:
       - key: kubernetes.io/metadata.name
         operator: NotIn
