@@ -90,25 +90,44 @@ watchesFile: ""
 
 # For what a Kiali CR spec can look like, see: https://kiali.io/docs/configuration/kialis.kiali.io/
 cr:
-  create: true  # Changed to true since we want to create a CR
+  create: true
   name: kiali
-  namespace: istio-system  # Assuming you want to install in istio-system
+  namespace: istio-system
   spec:
     auth:
-      strategy: anonymous  # Disable login
+      strategy: anonymous
     deployment:
       cluster_wide_access: true
       view_only_mode: false
+      service_type: ClusterIP
+      additional_service_yaml:
+        networking.istio.io/v1alpha3/VirtualService:
+          metadata:
+            name: kiali
+            namespace: istio-system
+          spec:
+            hosts:
+            - "kiali.ramil.local"
+            gateways:
+            - istio-system/kiali-gateway
+            http:
+            - route:
+              - destination:
+                  host: kiali
+                  port:
+                    number: 20001
     external_services:
       prometheus:
-        url: "http://prometheus-server.monitoring:80"  # Based on your prometheus-server service
+        url: "http://prometheus-server.monitoring:80"
       grafana:
         enabled: true
-        in_cluster_url: "http://grafana.monitoring:80"  # Based on your grafana service
+        in_cluster_url: "http://grafana.monitoring:80"
         url: "http://grafana.monitoring:80"
         auth:
           type: none
     istio_namespace: istio-system
     istio_component_namespaces:
-      prometheus: monitoring  # Since your Prometheus is in monitoring namespace
-      grafana: monitoring 
+      prometheus: monitoring
+      grafana: monitoring
+    server:
+      web_root: /
