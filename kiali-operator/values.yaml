@@ -122,8 +122,8 @@ cr:
         url: "http://prometheus-server.monitoring:80"
       grafana:
         enabled: true
-        in_cluster_url: "http://grafana.monitoring:80"
-        url: "http://grafana.monitoring:80"
+        in_cluster_url: "https://grafana.monitoring:80"
+        url: "https://grafana.monitoring:80"
         auth:
           type: none
     istio_namespace: istio-system
